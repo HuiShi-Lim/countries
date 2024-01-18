@@ -1,13 +1,14 @@
 import { useState, useEffect } from "react";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
-import { useParams } from "react-router-dom";
+import { BrowserRouter, Route, Routes, createBrowserRouter, createRoutesFromElements } from "react-router-dom";
 import CountryList from "./components/CountryList";
-import Header from "./components/Header";
 import SearchBar from "./components/SearchBar";
 import CountryDetails from "./components/CountryDetails";
+import Layout from "./components/Layout";
 
-function App() {
+export default function App() {
   const [countries, setCountries] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
   const [filterCountries, setFilterCountries] = useState([]);
   const [region, setRegion] = useState("");
   const [searchInput, setSearchInput] = useState("");
@@ -23,6 +24,12 @@ function App() {
       .then((data) => {
         setCountries(data);
         setFilterCountries(data);
+        setIsLoading(false);
+        setError(null);
+      })
+      .catch((err) => {
+        setIsLoading(false);
+        setError(err.message);
       });
   }, []);
 
@@ -52,26 +59,17 @@ function App() {
 
   return (
     <BrowserRouter>
-      <div className="">
-        <Header />
-        <SearchBar
-          region={region}
-          setRegion={setRegion}
-          searchInput={searchInput}
-          setSearchInput={setSearchInput}
-        />
-        <div>
-          <Routes>
-            <Route
-              path="/"
-              element={<CountryList countries={filterCountries} />}
+        <Routes>
+          <Route path="/" element={<Layout />} >
+            <Route path="" element={
+            <> 
+            <SearchBar region={region} setRegion={setRegion} searchInput={searchInput} setSearchInput={setSearchInput}/> 
+            <CountryList countries={filterCountries} isLoading={isLoading} error={error}/> 
+            </>} 
             />
-            <Route path="/name/:name" element={<CountryDetails  countries={countries} setCountries={setCountries}/>} />
-          </Routes>
-        </div>
-      </div>
+            <Route path="/name/:name" element={<CountryDetails/>} />
+          </Route>
+        </Routes>
     </BrowserRouter>
   );
 }
-
-export default App;
