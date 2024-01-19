@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { BrowserRouter, Route, Routes, createBrowserRouter, createRoutesFromElements } from "react-router-dom";
+import { BrowserRouter, Route, Routes} from "react-router-dom";
 import CountryList from "./components/CountryList";
 import SearchBar from "./components/SearchBar";
 import CountryDetails from "./components/CountryDetails";
@@ -61,13 +61,13 @@ export default function App() {
     <BrowserRouter>
         <Routes>
           <Route path="/" element={<Layout />} >
-            <Route path="" element={
+            <Route index element={
             <> 
             <SearchBar region={region} setRegion={setRegion} searchInput={searchInput} setSearchInput={setSearchInput}/> 
             <CountryList countries={filterCountries} isLoading={isLoading} error={error}/> 
             </>} 
             />
-            <Route path="/name/:name" element={<CountryDetails/>} />
+            <Route path="/name/:name" element={<CountryDetails countries={countries}/>} />
           </Route>
         </Routes>
     </BrowserRouter>

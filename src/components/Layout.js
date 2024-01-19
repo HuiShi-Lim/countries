@@ -4,11 +4,9 @@ import React from "react";
 
 export default function Layout() {
   return (
-    <div className="bg-white dark:bg-gray-800">
+    <div>
       <Header />
-      <div className="bg-white dark:bg-gray-800">
-        <Outlet />
-      </div>
+      <Outlet />
     </div>
   );
 }

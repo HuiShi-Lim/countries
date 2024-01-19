@@ -1,13 +1,14 @@
 import React from "react";
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { MdKeyboardBackspace } from "react-icons/md";
 
-function CountryDetails() {
+export default function CountryDetails({ countries }) {
   const { name } = useParams();
-  const [testCountry, setTestCountry] = useState({});
+  const [country, setCountry] = useState({});
   const [isLoading, setIsLoading] = useState(true);
-  console.log(testCountry);
+  const navigate = useNavigate();
+  console.log(country.name);
 
   const getAllLanguages = (languages) => {
     if (!languages) return;
@@ -19,6 +20,10 @@ function CountryDetails() {
     return Object.values(currency).map((curr) => curr.name);
   };
 
+  function handleClick() {
+    navigate("/");
+  }
+
   useEffect(() => {
     fetch("https://restcountries.com/v3.1/name/" + name)
       .then((res) => {
@@ -28,78 +33,100 @@ function CountryDetails() {
         return res.json();
       })
       .then((data) => {
-        setTestCountry(data[0]);
+        setCountry(data[0]);
         setIsLoading(false);
       });
   }, [name]);
 
   return (
-    <div className="pt-16 px-20 ">
-      <Link to="/" className="flex items-center pl-14 ">
+    <div className="bg-white dark:bg-gray-800 pt-16 px-20">
+      <div>
+        <button onClick={handleClick} className="bg-white dark:bg-[#2B3844] dark:text-white flex items-center border-transparent rounded-md px-8 py-2 "> <i className="pr-2"><MdKeyboardBackspace /></i> Back</button>
+      </div>
+      {/* <Link to="/" className="flex items-center pl-14 box-border">
         <i className="pr-2"><MdKeyboardBackspace /></i> Back
-      </Link>
-      
-      {/* <div> */}
-      {isLoading && <div>Loading...</div>}
-        {Object.keys(testCountry).length > 0 && (
-          <div className="mt-20 lg:flex justify-evenly sm:inline-block">
-            <div className="border bg-gray-50	">
-            <img
-              src={testCountry.flags.svg}
-              alt={testCountry.name.common}
-              className="rounded-t h-[440px] w-[540px]"
-            ></img>
-            </div>
-            <div className="pl-20">
-              <p className="text-3xl font-extrabold pt-5">
-                {testCountry.name.common}
-              </p>
-              <div className="pt-4 pb-11 grid grid-rows-5 grid-cols-2 gap-x-20 gap-y-3">
-                <p>
-                  <b>Native Name: </b>
-                  {
-                    testCountry.name.nativeName[
-                      Object.keys(testCountry.name.nativeName)[0]
-                    ]?.common
-                  }
+      </Link> */}
+      {isLoading && <div className="dark:text-white">Loading...</div>}
+        {Object.keys(country).length > 0 && (
+          <div className="dark:text-white mt-20 flex justify-around">
+              <img
+                src={country.flags.svg}
+                alt={country.name.common}
+                className="rounded h-[440px] w-[540px]"
+              ></img>
+              <div className="pl-16">
+                <p className="text-3xl font-extrabold pt-5">
+                  {country.name.common}
                 </p>
-                <p>
-                  <b>Population:</b> {testCountry.population}
-                </p>
-                <p>
-                  <b>Region:</b> {testCountry.region}
-                </p>
-                <p>
-                  <b>Sub Region:</b> {testCountry.subregion}
-                </p>
-                <p>
-                  <b>Capital:</b> {testCountry.capital}
-                </p>
+              <div className="pt-10 pb-11 grid grid-cols-2 gap-x-28 gap-y-3">
                   <p>
-                    <b>Top Level Domain:</b> {testCountry.tld}
+                    <b>Native Name: </b>
+                    {
+                      country.name.nativeName[
+                        Object.keys(country.name.nativeName)[0]
+                      ]?.common
+                    }
                   </p>
                   <p>
-                    <b>Currencies: </b>
-                    {getAllCurrencies(testCountry.currencies).join(", ")}
+                    <b>Population:</b> {country.population}
                   </p>
                   <p>
-                    <b>Languages: </b>{getAllLanguages(testCountry.languages).join(", ")}
+                    <b>Region:</b> {country.region}
                   </p>
+                  <p>
+                    <b>Sub Region:</b> {country.subregion}
+                  </p>
+                  <p>
+                    <b>Capital:</b> {country.capital}
+                  </p>
+                    <p>
+                      <b>Top Level Domain:</b> {country.tld}
+                    </p>
+                    <p>
+                      <b>Currencies: </b>
+                      {getAllCurrencies(country.currencies).join(", ")}
+                    </p>
+                    <p>
+                      <b>Languages: </b>{getAllLanguages(country.languages).join(", ")}
+                    </p>
               </div>
               <div>
-                  <b>Border Countries: </b>{testCountry.borders && testCountry.borders.length > 0 ? (testCountry.borders.map((countryBorders) => (
-                    <button key={countryBorders} className="border px-4">{countryBorders}</button>
-                  ))
-                  ) : (
-                    <span>None</span>
-                  )}
+                <b>Border Countries: </b>
+                {country.borders && country.borders.length > 0 ? (
+                  country.borders.map((countryBorder) => {
+                    const matchingCountry = countries.find(
+                      (c) => c.cca3 === countryBorder
+                    );
+                    console.log(`Border: ${countryBorder}, Matching Country:`, matchingCountry);
+
+                    return matchingCountry ? (
+                      <Link to={`/name/${matchingCountry.name.common}`} key={countryBorder}>
+                        <button className="dark:bg-[#2B3844] dark:text-white border px-6 ml-3 mb-2">
+                          {matchingCountry.name.common}
+                        </button>
+                      </Link>
+                    ) : (
+                      null
+                    );
+                  })
+                ) : (
+                  <span className="dark:text-white">None</span>
+                )}
+              </div>
+
+                  {/* <div>
+                    <b>Border Countries: </b>{country.borders && country.borders.length > 0 ? (country.borders.map((countryBorders) => (
+                      <Link to={`${country.cca3}`} key={countryBorders}> 
+                      <button  className="dark:bg-[#2B3844] dark:text-white border px-4 mr-3">{countryBorders}</button>
+                      </Link>
+                    ))
+                    ) : (
+                      <span className="dark:text-white">None</span>
+                    )}
+                  </div> */}
               </div>
             </div>
-          </div>
         )}
-      {/* </div> */}
     </div>
   );
 }
-
-export default CountryDetails;

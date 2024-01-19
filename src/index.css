@@ -7,3 +7,14 @@
 * {
   font-family: "Nunito Sans", sans-serif;
 }
+
+body {
+  background-color: white; /* Default light mode background color */
+
+  /* Check if the dark mode is set to dark and update background color */
+  @media (prefers-color-scheme: dark), (prefers-color-scheme: no-preference) {
+    body {
+      background-color: rgb(31, 41, 55); /* dark mode background color */
+    }
+  }
+}
