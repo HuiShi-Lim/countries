@@ -14,7 +14,8 @@ export default function App() {
   const [searchInput, setSearchInput] = useState("");
 
   useEffect(() => {
-    fetch("https://restcountries.com/v3.1/all")
+    setTimeout(() => {
+      fetch("https://restcountries.com/v3.1/all")
       .then((res) => {
         if (!res.ok) {
           throw Error("Could not fetch the data :(");
@@ -31,6 +32,7 @@ export default function App() {
         setIsLoading(false);
         setError(err.message);
       });
+    }, 1000);
   }, []);
 
   useEffect(() => {

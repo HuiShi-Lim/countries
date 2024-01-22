@@ -2,16 +2,16 @@ import { Link } from "react-router-dom";
 
 export default function CountryList({ countries, isLoading, error}) {
   return (
-    <div className="bg-[#FAFAFA] dark:bg-gray-800 py-8 px-20 grid lg:grid-cols-4 gap-x-36 gap-y-24 sm:grid-rows-1">
-      {isLoading && <div>Loading...</div>}
+    <div className="bg-[#fafafa] dark:bg-gray-800 flex flex-wrap gap-[75px] justify-center">
+      {isLoading && <div className="dark:text-white">Loading...</div>}
       {error && <div>{error}</div>}
       {countries.map((country) => (
-        <div key={country.name.official} className="dark:bg-[#2B3844] border-transparent rounded shadow w-[280px] transition transform hover:-translate-y-1">
-          <Link to={`/name/${country.name.official}`}>
+        <div key={country.name.common} className="dark:bg-[#2B3844] border-transparent rounded shadow mx-10 w-[264px] transition transform hover:-translate-y-1">
+          <Link to={`/name/${country.name.common}`}>
             <img
               src={country.flags.svg}
               alt={country.name.common}
-              className="rounded-t h-[200px] w-auto object-cover"
+              className="rounded-t h-[150px] w-full object-cover md:h-[180px]"
             ></img>
             <div className="dark:text-white pl-2">
               <p className="text-lg font-extrabold pt-5">

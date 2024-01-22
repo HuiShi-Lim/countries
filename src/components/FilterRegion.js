@@ -1,8 +1,8 @@
 function FilterRegion({ region, setRegion }) {
   return (
-    <div className="dark:bg-[#2B3844] border-transparent h-14 w-48 shadow-md">
+    <div className="bg-white dark:bg-[#2B3844] border-transparent h-14 w-48 shadow-md">
       <select
-        className="dark:bg-[#2B3844] dark:text-white py-3.5 px-6 content-center outline-none"
+        className="dark:bg-[#2B3844] dark:text-white mx-7 my-4 outline-none"
         value={region}
         onChange={(e) => setRegion(e.target.value)}
       >

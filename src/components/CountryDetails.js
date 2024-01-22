@@ -7,6 +7,7 @@ export default function CountryDetails({ countries }) {
   const { name } = useParams();
   const [country, setCountry] = useState({});
   const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
   const navigate = useNavigate();
   console.log(country.name);
 
@@ -25,7 +26,8 @@ export default function CountryDetails({ countries }) {
   }
 
   useEffect(() => {
-    fetch("https://restcountries.com/v3.1/name/" + name)
+    setTimeout(() => {
+      fetch("https://restcountries.com/v3.1/name/" + name + "?fullText=true")
       .then((res) => {
         if (!res.ok) {
           throw Error("Could not fetch the data :(");
@@ -35,30 +37,42 @@ export default function CountryDetails({ countries }) {
       .then((data) => {
         setCountry(data[0]);
         setIsLoading(false);
+        setError(null);
+      })
+      .catch((err) => {
+        setIsLoading(false);
+        setError(err.message);
       });
+    }, 1000);
   }, [name]);
 
   return (
-    <div className="bg-white dark:bg-gray-800 pt-16 px-20">
+    <div className="h-screen bg-[#fafafa] dark:bg-gray-800 pt-16 px-7 md:px-20">
       <div>
-        <button onClick={handleClick} className="bg-white dark:bg-[#2B3844] dark:text-white flex items-center border-transparent rounded-md px-8 py-2 "> <i className="pr-2"><MdKeyboardBackspace /></i> Back</button>
+        <button onClick={handleClick} className="bg-white dark:bg-[#2B3844] dark:text-white flex items-center border-transparent rounded-md px-8 py-2"> <i className="pr-2"><MdKeyboardBackspace /></i> Back</button>
       </div>
       {/* <Link to="/" className="flex items-center pl-14 box-border">
         <i className="pr-2"><MdKeyboardBackspace /></i> Back
       </Link> */}
       {isLoading && <div className="dark:text-white">Loading...</div>}
+      {error && <div>{error}</div>}
         {Object.keys(country).length > 0 && (
-          <div className="dark:text-white mt-20 flex justify-around">
+          <div className="dark:text-white mt-20 md:flex justify-evenly">
+              <div>
               <img
                 src={country.flags.svg}
                 alt={country.name.common}
-                className="rounded h-[440px] w-[540px]"
+                className="rounded md:h-[480px] w-[500px]"
               ></img>
-              <div className="pl-16">
-                <p className="text-3xl font-extrabold pt-5">
+              </div>
+              <div className="">
+              <div className="text-3xl font-extrabold pt-5">
+                <p className="">
                   {country.name.common}
                 </p>
-              <div className="pt-10 pb-11 grid grid-cols-2 gap-x-28 gap-y-3">
+              </div>
+              <div className="text-base	pt-10 pb-9 md:flex">
+                <div className="pb-8 md:pr-32">
                   <p>
                     <b>Native Name: </b>
                     {
@@ -79,6 +93,8 @@ export default function CountryDetails({ countries }) {
                   <p>
                     <b>Capital:</b> {country.capital}
                   </p>
+                </div>
+                <div>
                     <p>
                       <b>Top Level Domain:</b> {country.tld}
                     </p>
@@ -89,8 +105,9 @@ export default function CountryDetails({ countries }) {
                     <p>
                       <b>Languages: </b>{getAllLanguages(country.languages).join(", ")}
                     </p>
+                </div>
               </div>
-              <div>
+              <div className="md:flex flex-wrap">
                 <b>Border Countries: </b>
                 {country.borders && country.borders.length > 0 ? (
                   country.borders.map((countryBorder) => {
@@ -101,9 +118,11 @@ export default function CountryDetails({ countries }) {
 
                     return matchingCountry ? (
                       <Link to={`/name/${matchingCountry.name.common}`} key={countryBorder}>
-                        <button className="dark:bg-[#2B3844] dark:text-white border px-6 ml-3 mb-2">
+                        <div>
+                          <button className="dark:bg-[#2B3844] dark:text-white border text-sm px-6 lg:ml-3 mb-2">
                           {matchingCountry.name.common}
-                        </button>
+                          </button>
+                        </div>
                       </Link>
                     ) : (
                       null
