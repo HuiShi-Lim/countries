@@ -15,3 +15,8 @@
 .light {
   background-color: #fafafa;
 }
+
+#root {
+  max-width: 2560px; /* 1440px */
+  margin: auto;
+}

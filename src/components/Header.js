@@ -9,12 +9,6 @@ export default function Header() {
   const [colorTheme, setTheme] = useDarkSide();
   const [darkSide, setDarkSide] = useState(colorTheme === 'light' ? true : false);
 
-  // const toggleDarkMode = checked => {
-  //   setTheme(colorTheme);
-  //   setDarkSide(checked);
-  //   console.log(checked);
-  // };
-
   const toggleDarkMode = () => {
     const newTheme = darkSide ? 'light' : 'dark';
     setTheme(newTheme);
@@ -32,7 +26,6 @@ export default function Header() {
           </i> 
           Dark Mode
       </button>
-      {/* <button className="dark:text-white flex items-center text-base font-semibold" onClick={() => toggleDarkMode(!darkSide)}> <i className="pr-2 dark:fill-white"><FaRegMoon /></i> Dark Mode</button> */}
     </div>
   );
 }

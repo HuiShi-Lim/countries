@@ -9,7 +9,6 @@ export default function CountryDetails({ countries }) {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
   const navigate = useNavigate();
-  console.log(country.name);
 
   const getAllLanguages = (languages) => {
     if (!languages) return;
@@ -49,25 +48,23 @@ export default function CountryDetails({ countries }) {
   return (
     <div className="h-screen bg-[#fafafa] dark:bg-gray-800 pt-16 px-7 md:px-20">
       <div>
-        <button onClick={handleClick} className="bg-white dark:bg-[#2B3844] dark:text-white flex items-center border-transparent rounded-md px-8 py-2"> <i className="pr-2"><MdKeyboardBackspace /></i> Back</button>
+        <button onClick={handleClick} className="bg-white dark:bg-[#2B3844] dark:text-white flex items-center border-transparent rounded-md px-8 py-2"> 
+        <i className="pr-2"><MdKeyboardBackspace /></i> Back</button>
       </div>
-      {/* <Link to="/" className="flex items-center pl-14 box-border">
-        <i className="pr-2"><MdKeyboardBackspace /></i> Back
-      </Link> */}
-      {isLoading && <div className="dark:text-white">Loading...</div>}
-      {error && <div>{error}</div>}
+      {isLoading && <p className="dark:text-white text-center">Loading...</p>}
+      {error && <p className="dark:text-white text-center">{error}</p>}
         {Object.keys(country).length > 0 && (
-          <div className="dark:text-white mt-20 md:flex justify-evenly">
-              <div>
+          <div className="dark:text-white mt-20 justify-evenly md:flex">
+              <div className="basis-1/2 md:pr-6">
               <img
                 src={country.flags.svg}
                 alt={country.name.common}
-                className="rounded md:h-[480px] w-[500px]"
+                className="rounded w-[500px]"
               ></img>
               </div>
-              <div className="">
+              <div className="basis-1/2">
               <div className="text-3xl font-extrabold pt-5">
-                <p className="">
+                <p>
                   {country.name.common}
                 </p>
               </div>
@@ -107,44 +104,34 @@ export default function CountryDetails({ countries }) {
                     </p>
                 </div>
               </div>
-              <div className="md:flex flex-wrap">
-                <b>Border Countries: </b>
-                {country.borders && country.borders.length > 0 ? (
-                  country.borders.map((countryBorder) => {
-                    const matchingCountry = countries.find(
-                      (c) => c.cca3 === countryBorder
-                    );
-                    console.log(`Border: ${countryBorder}, Matching Country:`, matchingCountry);
+              <div className="flex flex-col md:flex-row">
+                <b>Border Countries:  </b>
+                <div className="flex flex-wrap">
+                  {country.borders && country.borders.length > 0 ? (
+                    country.borders.map((countryBorder) => {
+                      const matchingCountry = countries.find(
+                        (c) => c.cca3 === countryBorder
+                      );
 
-                    return matchingCountry ? (
-                      <Link to={`/name/${matchingCountry.name.common}`} key={countryBorder}>
-                        <div>
-                          <button className="dark:bg-[#2B3844] dark:text-white border text-sm px-6 lg:ml-3 mb-2">
-                          {matchingCountry.name.common}
-                          </button>
-                        </div>
-                      </Link>
-                    ) : (
-                      null
-                    );
-                  })
-                ) : (
-                  <span className="dark:text-white">None</span>
-                )}
-              </div>
-
-                  {/* <div>
-                    <b>Border Countries: </b>{country.borders && country.borders.length > 0 ? (country.borders.map((countryBorders) => (
-                      <Link to={`${country.cca3}`} key={countryBorders}> 
-                      <button  className="dark:bg-[#2B3844] dark:text-white border px-4 mr-3">{countryBorders}</button>
-                      </Link>
-                    ))
-                    ) : (
-                      <span className="dark:text-white">None</span>
-                    )}
-                  </div> */}
+                      return matchingCountry ? (
+                        <Link to={`/name/${matchingCountry.name.common}`} key={countryBorder}>
+                          <div>
+                            <button className="dark:bg-[#2B3844] dark:text-white border text-sm px-6 mb-2 mr-3 md:ml-3">
+                            {matchingCountry.name.common}
+                            </button>
+                          </div>
+                        </Link>
+                      ) : (
+                        null
+                      );
+                    })
+                  ) : (
+                    <span className="dark:text-white"> None</span>
+                  )}
+                </div>
               </div>
             </div>
+          </div>
         )}
     </div>
   );
